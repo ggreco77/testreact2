@@ -11,9 +11,10 @@ import useDragSprite from "../hooks/useDragSprite";
 import useTicker from "../hooks/useTicker";
 import usePointerPosition from "../hooks/usePointerPosition";
 import useResponsiveSpriteSize from "../hooks/useResponsiveSpriteSize";
-import { POPUPS } from "../content/popups.jsx";
-import { TIPS } from "../content/tips.jsx";
+import { usePopups } from "../content/popups.jsx";
+//import { TIPS } from "../content/tips.jsx";
 import TopAlert from "./TopAlert.jsx";
+import { useLanguage } from "./LanguageContext";
 
 const BASE_MASS = 0.68;
 const SINGULARITY_MASS = 0.98;
@@ -29,6 +30,31 @@ const POPUP_META = {
 };
 
 export default function Playground({ mode, highContrast }) {
+
+  const { lang } = useLanguage();
+  const STR = {
+    it: {
+      badge: "Start",
+      hello: "Ciao! Sono il Dottor Tensor.",
+      choose: "Scegliete un’avventura",
+      tail: "e accompagnatemi nell’Area Giochi!",
+    },
+    en: {
+      badge: "Start",
+      hello: "Hi! I'm Doctor Tensor.",
+      choose: "Choose an adventure",
+      tail: "and join me in the Playground!",
+    },
+    sc: {
+      badge: "Start",
+      hello: "Saludi! Mi nant Tensor, su Dotori",
+      choose: "Scioberai-ddoi un’aventura",
+      tail: "e benei cun mei in s’area de is giogus.",
+    },
+  };
+  const s = STR[lang] || STR.it;
+
+  const POPUPS = usePopups();
   const [extraTL, setExtraTL] = React.useState(0);
   const [gameOver, setGameOver] = React.useState(false);
   const [showTips, setShowTips] = React.useState(true);
@@ -72,7 +98,7 @@ export default function Playground({ mode, highContrast }) {
     setPos({ x: Math.max(80, size.w * 0.2), y: 70 });
   };
 
-  const popup = POPUPS[mode] ?? POPUPS._default;
+  const popup = POPUPS[mode];
   const spriteSize = Math.round(
     spriteBase * (1 - 0.4 * (mode === "tl" ? extraTL : 0))
   );
@@ -95,11 +121,11 @@ export default function Playground({ mode, highContrast }) {
     <div className={`stage`} ref={stageRef}>
       <div className="stage-inner">
         <div className="intro-lane">
-          <span className="badge">Start</span>
+          <span className="badge">{s.badge}</span>
           <div className="intro-card">
             <div>
-              <b>Ciao! Sono il Dottor Tensor.</b> <i>Scegliete un’avventura</i>{" "}
-              e accompagnatemi nell’Area Giochi!
+              <b>{s.hello}</b> <i>{s.choose}</i>{" "}
+              {s.tail}
             </div>
           </div>
         </div>
@@ -183,8 +209,8 @@ export default function Playground({ mode, highContrast }) {
             role="dialog"
             aria-live="polite"
           >
-            <h4>{popup.title}</h4>
-            <div>{popup.text}</div>
+             {popup?.title && <h4>{popup.title}</h4>}
+              <div>{popup?.text}</div>
           </div>
         )}
       </div>
@@ -192,12 +218,8 @@ export default function Playground({ mode, highContrast }) {
       {gameOver && <TopAlert onRestart={handleRestart} />}
 
       {showTips && (
-        <TipsPanel
-          title="Suggerimenti e Modalità d'uso"
-          tips={TIPS[mode] || []}
-          onClose={() => setShowTips(false)}
-        />
-      )}
+   <TipsPanel onClose={() => setShowTips(false)} />
+ )}
     </div>
   );
 }

@@ -1,5 +1,30 @@
 import React, { useEffect, useState } from "react";
 
+
+import { useLanguage } from "../LanguageContext"; 
+
+// Testi per lingua
+const STR = {
+  it: {
+    start: "▶️ Onde Gravitazionali da un sistema binario di buchi neri",
+    stop: "⏸️ Stop",
+    typewriter:
+      "Lo spazio-tempo si allunga e si accorcia e strumenti estremamente sensibili, come gli interferometri Virgo, LIGO e KAGRA, registrano il passaggio di un'onda gravitazionale.",
+  },
+  en: {
+    start: "▶️ Gravitational waves from a black-hole binary",
+    stop: "⏸️ Stop",
+    typewriter:
+      "Spacetime stretches and squeezes, and ultra-sensitive instruments like the Virgo, LIGO, and KAGRA interferometers record the passage of a gravitational wave.",
+  },
+  sc: {
+    start: "▶️ Undas gravitatzionalis de una loba de istampus nieddus",
+    stop: "⏸️ Para",
+    typewriter:
+      "S’ispàtziu-tempus s’allonghiat e s’incurtzat e is ainai sensìbilis meda a beru, cumenti is interferòmetrus Virgo, LIGO e KAGRA, ammesurant sa passada de is undas gravitatzionalis.",
+  },
+};
+
 /**
  * ElasticExp (Semplice & fisicamente coerente)
  * - Due buchi neri vicini; un bottone in basso li fa ruotare (ON) o fermare (OFF).
@@ -8,6 +33,10 @@ import React, { useEffect, useState } from "react";
  * - L’interferometro a L al centro visualizza la stessa deformazione.
  */
 export default function ElasticExp({ w, h, laneH = 110, onWave = () => {} }) {
+ const { lang } = useLanguage();
+const s = STR[lang] || STR.it;
+  
+  
   // Centro della L
   const cx = Math.round(w * 0.5);
   const cy = Math.max(Math.round(h * 0.8), laneH + 160);
@@ -27,7 +56,8 @@ export default function ElasticExp({ w, h, laneH = 110, onWave = () => {} }) {
   const AMP_TARGET = 0.12; // ampiezza “giocattolo” (squeeze/stretch visibile)
 
   // Testo etichetta (per il typewriter)
-  const testo = `Lo spazio-tempo si allunga e si accorcia e strumenti estremamente sensibili, come gli interferometri Virgo, LIGO e KAGRA, registrano il passaggio di un'onda gravitazionale.`;
+
+  const testo = s.typewriter;
   const [typed, setTyped] = useState("");
 
   // Typewriter soft: lettera per lettera con pause sulla punteggiatura
@@ -108,6 +138,57 @@ const PAUSE = {       // pause più lunghe su punteggiatura
   };
   const BH_SIZE = 80;
 
+// --- Propagazione GW (outward, increspatura forte, concentriche) ---
+
+
+// --- Propagazione GW (outward, fluida, concentriche, no-pop) ---
+// Onde che partono appena oltre la coppia di BH
+const INNER_R = ORBIT_R + BH_SIZE * 0.5 + 4;
+
+// Distanza tra creste: più grande = meno cerchi = più fps
+const SPACING = Math.max(40, side * 0.12);
+
+// Velocità radiale (px per ogni 2π di phase)
+const waveSpeed = SPACING * 2.2;
+
+// Offset radiale: cresce linearmente con la phase → espansione verso l’esterno
+const offset = (phase / (2 * Math.PI)) * waveSpeed;
+
+// Raggio massimo da coprire
+const cornerDists = [
+  Math.hypot(midX - 0,  midY - 0),
+  Math.hypot(midX - w,  midY - 0),
+  Math.hypot(midX - 0,  midY - h),
+  Math.hypot(midX - w,  midY - h),
+];
+const RMAX = Math.max(...cornerDists) + SPACING;
+const depth = RMAX - INNER_R;
+
+// **N fisso** di cerchi per evitare aggiunte/rimozioni ad ogni frame
+const COUNT = Math.ceil(depth / SPACING) + 2;
+
+// Indice logico iniziale: garantisce che il primo cerchio sia poco prima di INNER_R
+const i0 = Math.floor((INNER_R - offset) / SPACING) - 1;
+
+// Raggi + id STABILE (key) → niente “pop” quando un’onda esce/entra
+const rings = Array.from({ length: COUNT }, (_, k) => {
+  const id = i0 + k;                 // key stabile nel tempo
+  const r = id * SPACING + offset;   // r cresce in modo continuo
+  return { r, id };
+});
+
+// Increspatura (cresta/valle)
+const crestW = Math.max(3, 2 + amp * 16);
+const troughW = crestW * 1.25;
+const crestOpacity  = Math.min(1, 0.70 + amp * 0.70);
+const troughOpacity = crestOpacity * 0.55;
+
+// Fade di emersione vicino ai BH (anti “comparsa di botto”)
+const FADE = Math.max(16, BH_SIZE * 0.25); // 16–24px tipico
+const clamp01 = (t) => Math.max(0, Math.min(1, t));
+const smooth  = (t) => t * t * (3 - 2 * t); // smoothstep
+
+
   return (
     <>
       {/* Buchi neri (solo visual, click gestito dal bottone) */}
@@ -124,6 +205,7 @@ const PAUSE = {       // pause più lunghe su punteggiatura
           boxShadow:
             "0 0 30px 12px rgba(40,80,255,0.35), 0 0 60px 24px rgba(0,0,0,0.9)",
           pointerEvents: "none",
+          willChange: "left, top",
         }}
         aria-hidden
       />
@@ -140,6 +222,7 @@ const PAUSE = {       // pause più lunghe su punteggiatura
           boxShadow:
             "0 0 30px 12px rgba(40,80,255,0.35), 0 0 60px 24px rgba(0,0,0,0.9)",
           pointerEvents: "none",
+          willChange: "left, top",
         }}
         aria-hidden
       />
@@ -168,11 +251,83 @@ const PAUSE = {       // pause più lunghe su punteggiatura
             boxShadow: "0 10px 24px rgba(0,0,0,.25)",
           }}
         >
-          {running
-            ? "⏸️ Stop"
-            : "▶️ Onde Gravitazionali da un sistema binario di buchi neri"}
+          {running ? s.stop : s.start}
         </button>
       </div>
+
+{/* Propagazione onde gravitazionali (outward + fade continuo) */}
+{running && (
+  <svg
+    width={w}
+    height={h}
+    viewBox={`0 0 ${w} ${h}`}
+    style={{
+      position: "absolute",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 1, // dietro alla L (2) e ai BH (3)
+      shapeRendering: "geometricPrecision",
+    }}
+    aria-hidden
+  >
+    <defs>
+      <linearGradient id="gwCrest" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stopColor="#c7e3ff" />
+        <stop offset="100%" stopColor="#ffffff" />
+      </linearGradient>
+      <linearGradient id="gwTrough" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stopColor="#24528f" />
+        <stop offset="100%" stopColor="#5b86c9" />
+      </linearGradient>
+    </defs>
+
+    {/* Concentriche: centro = binario */}
+    <g transform={`translate(${midX}, ${midY})`} style={{ willChange: "transform" }}>
+      {rings.map(({ r, id }) => {
+        // salta i cerchi molto prima o molto oltre l'area utile
+        if (r < INNER_R - SPACING || r > RMAX + SPACING) return null;
+
+        // attenuazione verso il bordo
+        const falloff = Math.max(0.06, 1 - r / (RMAX + SPACING));
+
+        // fade di emersione nei primi FADE px oltre INNER_R
+        const uC = clamp01((r - INNER_R) / FADE);                  // cresta
+        const uT = clamp01((r + SPACING / 2 - INNER_R) / FADE);    // valle
+        const opC = crestOpacity  * falloff * smooth(uC);
+        const opT = troughOpacity * falloff * smooth(uT);
+
+        return (
+          <g key={id}>
+            {/* Valle (scura) a metà tra due creste */}
+            <circle
+              cx="0" cy="0" r={r + SPACING / 2}
+              fill="none"
+              stroke="url(#gwTrough)"
+              strokeWidth={troughW}
+              strokeOpacity={opT}
+              strokeLinecap="round"
+            />
+            {/* Cresta (chiara) */}
+            <circle
+              cx="0" cy="0" r={r}
+              fill="none"
+              stroke="url(#gwCrest)"
+              strokeWidth={crestW}
+              strokeOpacity={opC}
+              strokeLinecap="round"
+            />
+          </g>
+        );
+      })}
+    </g>
+  </svg>
+)}
+
+
+
+
+
+
 
       {/* Interferometro a L al centro: segue la GW globale */}
       <svg

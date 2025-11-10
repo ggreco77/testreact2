@@ -1,7 +1,31 @@
+// src/components/ScrollHeader.jsx
 import React, { useEffect, useRef, useState } from "react";
 import "./ScrollHeader.css";
+import { useLanguage } from "./LanguageContext"; // ← aggiorna il percorso se serve
+
+// Dizionario titoli/sottotitoli per lingua (nessuna libreria esterna)
+const HDR = {
+  it: {
+    title: "Doctor Tensor — Il Parco Giochi dello Spazio-Tempo",
+    subtitle:
+      "Accompagna il Doctor Tensor nelle quattro avventure per scoprire i misteri dello spazio-tempo, dei buchi neri e delle onde gravitazionali!",
+  },
+  en: {
+    title: "Doctor Tensor — The Spacetime Playground",
+    subtitle:
+      "Join Doctor Tensor in four adventures to explore the mysteries of spacetime, black holes, and gravitational waves!",
+  },
+  sc: {
+    title: "Tensor su Dotori - Su parcu po si spassiai cun su ispàtziu-tempus",
+    subtitle:
+      "Bai paris cun Tensor su Dotori po provai cuatru isperièntzias istraordinàrias po iscoberri is àrcanas de su ispàtziu-tempus, de is istampus nieddus e de is undas gravitatzionalis",
+  },
+};
 
 export default function ScrollHeader() {
+  const { lang } = useLanguage();
+  const s = HDR[lang] || HDR.it;
+
   const [hidden, setHidden] = useState(false);
   const [atTop, setAtTop] = useState(true);
 
@@ -26,14 +50,12 @@ export default function ScrollHeader() {
 
     setOffset();
 
-    // Aggiorna su resize / font load / layout changes
     const ro = new ResizeObserver(setOffset);
     if (wrapRef.current) ro.observe(wrapRef.current);
 
     window.addEventListener("resize", setOffset);
     window.addEventListener("orientationchange", setOffset);
 
-    // Font caricate in ritardo
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(setOffset).catch(() => {});
     }
@@ -49,8 +71,8 @@ export default function ScrollHeader() {
   useEffect(() => {
     if (reduceMotion.current) return; // niente hide-on-scroll se RM
 
-    const DOWN_HIDE_AFTER = 32; // px di scroll accumulati verso il basso
-    const UP_SHOW_AFTER = 24;   // px di scroll accumulati verso l'alto
+    const DOWN_HIDE_AFTER = 32; // px accumulati verso il basso
+    const UP_SHOW_AFTER = 24;   // px accumulati verso l'alto
     const TOP_STICKY = 64;      // sempre visibile vicino alla cima
 
     const onScroll = () => {
@@ -68,24 +90,17 @@ export default function ScrollHeader() {
         }
 
         if (y < TOP_STICKY) {
-          // in cima: mostra e resetta accumulatori
           accDown.current = 0;
           accUp.current = 0;
           setHidden(false);
         } else if (dy > 0) {
-          // scendo
           accDown.current += dy;
           accUp.current = 0;
-          if (accDown.current > DOWN_HIDE_AFTER) {
-            setHidden(true);
-          }
+          if (accDown.current > DOWN_HIDE_AFTER) setHidden(true);
         } else {
-          // salgo
           accUp.current += -dy;
           accDown.current = 0;
-          if (accUp.current > UP_SHOW_AFTER) {
-            setHidden(false);
-          }
+          if (accUp.current > UP_SHOW_AFTER) setHidden(false);
         }
 
         lastY.current = y;
@@ -108,15 +123,10 @@ export default function ScrollHeader() {
           reduceMotion.current ? "no-motion" : "",
         ].join(" ")}
       >
-        {/* tuo markup invariato */}
         <header className="header">
           <div className="header">
-            <h1>Doctor Tensor — Il Parco Giochi dello Spazio-Tempo</h1>
-            <p>
-              Accompagna il Doctor Tensor nelle quattro avventure per scoprire i
-              misteri dello spazio-tempo, dei buchi neri e delle onde
-              gravitazionali!
-            </p>
+            <h1>{s.title}</h1>
+            <p>{s.subtitle}</p>
           </div>
         </header>
       </div>
@@ -126,4 +136,3 @@ export default function ScrollHeader() {
     </>
   );
 }
-

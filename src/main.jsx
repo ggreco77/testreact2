@@ -1,14 +1,13 @@
+// src/main.jsx
 import React from "react"
 import { createRoot } from "react-dom/client"
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom"
+import { createHashRouter, RouterProvider } from "react-router-dom"
 import App from "./App.jsx"
 import "./styles.css"
+import { LanguageProvider } from "./components/LanguageContext"
 
-// Crei il router
-const router = createBrowserRouter(
+// Router con hash (URL tipo .../testreact/#/TappetoElastico)
+const router = createHashRouter(
   [
     {
       path: "/*",
@@ -16,12 +15,15 @@ const router = createBrowserRouter(
     },
   ],
   {
-    future: { v7_startTransition: true }, // 👈 Opt-in a v7
+    future: { v7_startTransition: true }, // Opt-in a v7
   }
 )
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <LanguageProvider>
+      <RouterProvider router={router} />
+    </LanguageProvider>
   </React.StrictMode>
 )
+

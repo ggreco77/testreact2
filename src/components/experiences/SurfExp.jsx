@@ -1,6 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { useLanguage } from "../LanguageContext";
+
+// Testi per lingua
+const STR = {
+  it: {
+    on: "↩︎",
+    off: "✨ Perché ET è speciale?",
+    line1: "Un laboratorio sotterraneo ⛏️🚜 con strumentazione criogenica ❄️🧊",
+    line2: "Il posto perfetto per costruirlo? La Sardegna, un’isola davvero silenziosa! 🤫🔇",
+  },
+  en: {
+    on: "↩︎",
+    off: "✨ Why is ET special?",
+    line1: "An underground laboratory ⛏️🚜 with cryogenic instrumentation ❄️🧊",
+    line2: "The perfect place to build it? Sardinia, an island truly quiet! 🤫🔇",
+  },
+  sc: {
+    on: "↩︎",
+    off: "✨ Poita ET est ispetziali?",
+    line1: "Unu laboratòriu asuta de terra ⛏️🚜 cun ainas criogènicas ❄️🧊",
+    line2: "Su logu prus ispantosu po ndi ddu pesai? Sa Sardigna, un’isula assèbia chieta a beru! 🤫🔇",
+  },
+};
+
+
+
+
 export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
+    const { lang } = useLanguage();
+  const s = STR[lang] || STR.it;
+  
   const cx = Math.round(w * 0.5);
   const cy = Math.round(h * 0.56);
 
@@ -156,7 +186,7 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
             boxShadow: "0 10px 24px rgba(0,0,0,.25)",
           }}
         >
-          {etOn ? "↩︎" : "✨ Perché ET è speciale?"}
+          {etOn ? s.on : s.off}
         </button>
       </div>
 
@@ -313,7 +343,7 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
           </>
         )}
 
-        {/* Etichetta */}
+        {/* Etichetta (localizzata) */}
         <text
   x={cx}
   y={Math.min(h - 50, groundY + (h < 520 ? 90 : 130))}
@@ -324,9 +354,9 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
 >
   {etOn && (
     <>
-     <tspan x={cx}>Un laboratorio sotterraneo ⛏️🚜 con strumentazione criogenica ❄️🧊</tspan>
-<tspan x={cx} dy="1.2em"> Il posto perfetto per costruirlo? La Sardegna, un’isola davvero silenziosa! 🤫🔇</tspan>
-
+     
+     <tspan x={cx}>{s.line1}</tspan>
+      <tspan x={cx} dy="1.2em">{s.line2}</tspan>
     </>
   )}
 </text>
