@@ -3,12 +3,36 @@ import { useLanguage } from "../components/LanguageContext"
 
 // Stili riusabili
 const common = {
-  block: {
+    block: {
     fontFamily: '"Fredoka","Baloo 2","Comic Sans MS", system-ui, sans-serif',
-    fontSize: "clamp(1rem, 1.5vw, 1.2rem)",
-    lineHeight: 1.05,
+    fontSize: "clamp(0.9rem, 1.8vw, 1.15rem)",
+    lineHeight: 1.3,
     fontWeight: 800,
     letterSpacing: "0.5px",
+
+    /* centra + occupa tutta la riga in ogni layout */
+    display: "block",
+    textAlign: "center",
+    width: "100%",
+    maxWidth: "92vw",
+    minWidth: 0,
+    margin: "0 auto",
+    padding: "0.5rem 0.75rem",
+    boxSizing: "border-box",
+
+    /* override se il parent è flex/grid/float */
+    float: "none",
+    clear: "both",
+    flex: "1 1 100%",
+    flexBasis: "100%",
+    alignSelf: "center",
+    gridColumn: "1 / -1",
+    justifySelf: "center",
+
+    /* wrapping robusto */
+    overflowWrap: "break-word",
+    wordBreak: "break-word",
+    hyphens: "auto",
   },
   blue:  { color: "#38bdf8", display: "inline-block", transform: "rotate(-1deg)",  textShadow: "0 2px 0 rgba(0,0,0,0.12)" },
   orange:{ color: "#f97316", display: "inline-block", transform: "rotate(-1deg)",  textShadow: "0 2px 0 rgba(0,0,0,0.12)" },
@@ -21,7 +45,7 @@ const common = {
 export const POPUPS_IT = {
   tl: {
     text: (
-      <div>
+      <div style={common.block}>
         <strong>Lo spazio-tempo</strong> è come un <strong>tappeto elastico</strong>: la mia <strong>massa</strong> lo piega.{" "}
         <div style={common.block}>
           <strong style={common.blue}>Accompagnami</strong>{" "}
@@ -39,7 +63,7 @@ export const POPUPS_IT = {
   },
   tr: {
     text: (
-      <div>
+      <div style={common.block}>
         <div>
           <strong>Cosa succede</strong> quando passa un’<strong>onda gravitazionale</strong>, magari generata da
           <strong> due buchi neri</strong> che danzano?
@@ -53,7 +77,7 @@ export const POPUPS_IT = {
   },
   bl: {
     text: (
-      <div>
+      <div style={common.block}>
         <div>
           Il <strong>14 settembre 2015</strong> abbiamo “ascoltato” la prima{" "}
           <strong>onda gravitazionale</strong>: due <strong>buchi neri</strong> si sono
@@ -123,7 +147,7 @@ export const POPUPS_EN = {
   },
   bl: {
     text: (
-      <div>
+      <div style={common.block}>
         <div>
           On <strong>September 14, 2015</strong> we “heard” the first{" "}
           <strong>gravitational wave</strong>: two <strong>black holes</strong>
@@ -165,13 +189,13 @@ export const POPUPS_SC = {
         sa <strong>massa</strong> cosa mia ddu incurbat.{" "}
         <div style={common.block}>
           <strong style={common.blue}>Beni cun mei</strong>{" "}
-          e <strong style={common.blue}>po castiai cumenti s’incurbat!!!</strong>
+          po <strong style={common.blue}> castiai cumenti s’incurbat!!!</strong>
         </div>
         <br />
         <div style={common.block}>
           Apustis,{" "}
           <strong style={common.orange}>movi sa barra</strong>{" "}
-          <strong style={{ color: "#f97316" }}>strintzier-mi</strong> a pagu a pagu{" "}
+          po <strong style={{ color: "#f97316" }}> mi stringi</strong> a pagu a pagu{" "}
           <strong style={common.red}>e castia ita acadessit!</strong>
         </div>
       </div>
@@ -185,22 +209,22 @@ export const POPUPS_SC = {
           criada, fortzis, de <strong>duus istampus nieddus</strong> totus badda-badda?
         </div>
         <div style={common.block}>
-          <strong style={common.orange}>Attiva su buttone</strong>{" "}
-          e <strong style={common.red}>bidea su chi capit!</strong>
+          <strong style={common.orange}>Craca su butoni</strong>{" "}
+          e <strong style={common.red}>castia ita acadessit!</strong>
         </div>
       </div>
     ),
   },
   bl: {
     text: (
-      <div>
+      <div style={common.block}>
         <div>
           Su <strong>14 de Cabudanni de su 2015</strong> eus aciapau sa primu{" "}
-          <strong>unda gravitatzionali</strong>: <strong>duus istampus nieddus</strong>
-          si fundint in d-unu feti, cun d-una <strong>massa paris a 62 de su Sole</strong>.
+          <strong>unda gravitatzionali</strong>: <strong> duus istampus nieddus </strong>
+          si funt fùndius in d-unu feti, cun d-una <strong> paris a 62 bortas sa de su Soli</strong>.
         </div>
         <div style={common.block}>
-          <strong style={common.orange}>Ammosta</strong>{" "}
+          <strong style={common.orange}>Iscoberri</strong>{" "}
           is <strong>massas initzialis</strong> de is duus istampus nieddus <strong>...</strong>{" "}
           <strong style={common.red}> imperendi is ferrus abàsciu ...</strong>
         </div>
@@ -212,13 +236,13 @@ export const POPUPS_SC = {
       <div>
         <div>
           <strong>Einstein Telescope</strong> at a essi unu telescòpiu ispetziali
-          chi “ascurtat”
- <strong>is istrobus de s’ispàtziu-tempus</strong>
+          chi at a “ascurtai” 
+ <strong> is istrobus de s’ispàtziu-tempus </strong>
           de is làcanas de s’<strong>Universu</strong>.
         </div>
         <div style={common.block}>
           <strong style={common.orange}>Iscoberri</strong>{" "}
-          is  <strong>fainas tecnològicas</strong>!{" "}
+          is  <strong> fainas tecnològicas cosa sua!</strong>{" "}
           <strong style={common.red}>Craca su butoni!</strong>
         </div>
       </div>
@@ -226,8 +250,144 @@ export const POPUPS_SC = {
   },
 }
 
+/* =========================
+   Spagnolo
+   ========================= */
+
+export const POPUPS_ES = {
+  tl: {
+    text: (
+      <div style={common.block}>
+        <strong>El espacio-tiempo</strong> es como una <strong>cama elástica</strong>: la <strong>masa</strong> lo dobla.{" "}
+        <div style={common.block}>
+          <strong style={common.blue}>Acompáñame</strong>{" "}
+          y <strong style={common.blue}>mira cómo se curva!!!</strong>
+        </div>
+        <br />
+        <div style={common.block}>
+          Luego,{" "}
+          <strong style={common.orange}>desliza el selector</strong>{" "}
+          para <strong style={{ color: "#f97316" }}>comprimirme</strong> cada vez más{" "}
+          <strong style={common.red}>¡y observa qué ocurre!</strong>
+        </div>
+      </div>
+    ),
+  },
+  tr: {
+    text: (
+      <div style={common.block}>
+        <div>
+          ¿Qué ocurre cuando pasa una <strong>onda gravitacional</strong>, quizá generada por
+          <strong> dos agujeros negros</strong> danzando?
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Pulsa el botón</strong>{" "}
+          y <strong style={common.red}>observa lo que sucede!</strong>
+        </div>
+      </div>
+    ),
+  },
+  bl: {
+    text: (
+      <div style={common.block}>
+        <div>
+          El <strong>14 de septiembre de 2015</strong> “escuchamos” la primera{" "}
+          <strong>onda gravitacional</strong>: dos <strong>agujeros negros</strong>
+          se fusionaron en uno de <strong>62 masas solares</strong>.
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Descubre</strong>{" "}
+          las <strong>masas iniciales</strong> de los dos agujeros negros{" "}
+          <strong>...</strong>{" "}
+          <strong style={common.red}>usando las tijeras abajo ...</strong>
+        </div>
+      </div>
+    ),
+  },
+  br: {
+    text: (
+      <div>
+        <div>
+          <strong>El Telescopio Einstein</strong> será un observatorio especial que
+          “escucha” las <strong>ondas del espacio-tiempo</strong> en el borde del <strong>Universo</strong>.
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Descubre</strong>{" "}
+          sus <strong>trucos tecnológicos</strong>!{" "}
+          <strong style={common.red}>¡Pulsa el botón!</strong>
+        </div>
+      </div>
+    ),
+  },
+}
+
+export const POPUPS_DE = {
+  tl: {
+    text: (
+      <div style={common.block}>
+        <strong>Die Raumzeit</strong> ist wie ein <strong>Trampolin</strong>:{" "}
+        <strong>Meine Masse</strong> verformt es.
+        <div style={common.block}>
+          <strong style={common.blue}>Folge mir</strong>{" "}
+          und <strong style={common.blue}>sieh, wie sie sich krümmt!!!</strong>
+        </div>
+        <br />
+        <div style={common.block}>
+          Dann, <strong style={common.orange}>bewege den Schieber</strong>,{" "}
+          <strong style={{ color: "#f97316" }}>drücke mich</strong> damit mehr und mehr zusammen{" "}
+          <strong style={common.red}>und beobachte, was passiert!</strong>
+        </div>
+      </div>
+    ),
+  },
+  tr: {
+    text: (
+      <div style={common.block}>
+        <div>
+          <strong>Was passiert</strong>, wenn eine <strong>Gravitationswelle</strong> vorbeizieht, vielleicht von{" "}
+          <strong> zwei tanzenden Schwarzen Löchern</strong>?
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Drücke den Knopf</strong>{" "}
+          und <strong style={common.red}>schau zu, wie sich alles entfaltet!</strong>
+        </div>
+      </div>
+    ),
+  },
+  bl: {
+    text: (
+      <div style={common.block}>
+        <div>
+          Am <strong>14. September 2015</strong> haben wir die erste <strong>Gravitationswelle</strong> „gehört“:{" "}
+          Zwei <strong>Schwarze Löcher</strong> verschmolzen zu einem einzigen mit <strong>62 Sonnenmassen</strong>.
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Finde</strong>{" "}
+          die <strong>Anfangsmassen</strong> der beiden Schwarzen Löcher heraus <strong>...</strong>{" "}
+          <strong style={common.red}>benutze dazu die Schere unten ...</strong>
+        </div>
+      </div>
+    ),
+  },
+  br: {
+    text: (
+      <div>
+        <div>
+          <strong>Einstein-Teleskop</strong> wird ein besonderes Observatorium sein, das am Rand des{" "}
+          <strong>Universums</strong> den Wellen in der <strong>Raumzeit</strong> „lauscht“.
+        </div>
+        <div style={common.block}>
+          <strong style={common.orange}>Entdecke</strong>{" "}
+          seine <strong>Super-Technik-Tricks</strong>!{" "}
+          <strong style={common.red}>Drück den Knopf!</strong>
+        </div>
+      </div>
+    ),
+  },
+};
+
 // Dizionario per lingua
-export const POPUPS_BY_LANG = { it: POPUPS_IT, en: POPUPS_EN, sc: POPUPS_SC }
+export const POPUPS_BY_LANG = { it: POPUPS_IT, en: POPUPS_EN, de: POPUPS_DE, sc: POPUPS_SC, es: POPUPS_ES  };
 
 /** Hook: restituisce i popups nella lingua corrente (dal LanguageContext) */
 export function usePopups() {

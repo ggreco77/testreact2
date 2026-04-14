@@ -1,4 +1,59 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../LanguageContext";
+
+// Testi per lingua
+const STR = {
+  it: {
+    idleButton: "✂️ Scopri le masse iniziali dei 2 buchi neri",
+    resetButton: "↩︎",
+    totalMass: "Mₜₒₜₐₗₑ = 62 masse solari",
+    m1: "M₁ = 36 masse solari",
+    m2: "M₂ = 29 masse solari",
+    cuttingTooltip: "Taglio in corso",
+    energyPanel: "Quante masse solari sono state convertite in energia?",
+  },
+  en: {
+    idleButton: "✂️ Discover the initial masses of the two black holes",
+    resetButton: "↩︎",
+    totalMass: "Mₜₒₜₐₗ = 62 solar masses",
+    m1: "M₁ = 36 solar masses",
+    m2: "M₂ = 29 solar masses",
+    cuttingTooltip: "Cutting in progress",
+        energyPanel: "3 solar masses have been converted into gravitational-wave energy",
+    energyPanel: "How many solar masses were converted into energy?",
+
+  },
+  sc: {
+    idleButton: "✂️  Iscoberri is massas de is duus stampus nieddus",
+    resetButton: "↩︎",
+    totalMass: "Mₜ = 62 bortas sa de su Soli",
+    m1: "M₁ = 36 bortas sa de su Soli",
+    m2: "M₂ = 29 bortas sa de su Soli",
+    cuttingTooltip: "",
+    energyPanel: "Cantu massas solaris ant tramudau in energia?",
+  },
+  de: {
+  idleButton: "✂️ Entdeckung der ursprünglichen Massen der beiden Schwarzen Löcher",
+  resetButton: "↩︎",
+  totalMass: "Mgesamt = 62 Sonnenmassen",
+  m1: "M₁ = 36 Sonnenmassen",
+  m2: "M₂ = 29 Sonnenmassen",
+  cuttingTooltip: "Schneiden läuft",
+  energyPanel: "Wie viele Sonnenmassen wurden in Energie umgewandelt?",
+},
+
+es: {
+  idleButton: "✂️ Descubre las masas iniciales de los 2 agujeros negros",
+  resetButton: "↩︎",
+  totalMass: "Mₜₒₜₐₗ = 62 masas solares",
+  m1: "M₁ = 36 masas solares",
+  m2: "M₂ = 29 masas solares",
+  cuttingTooltip: "Corte en curso",
+  energyPanel: "¿Cuántas masas solares se han convertido en energía?",
+},
+
+};
+
 
 /** LabExp — Doctor Chirp ha le forbici sul componente Sprite; qui gestiamo il “taglio”.
  *  Aggiunte:
@@ -6,7 +61,11 @@ import React, { useEffect, useRef, useState } from "react";
  *  - icona ✂️ grande vicino al buco nero durante la fase "cutting"
  */
 export default function LabExp({ w, h, onTool = () => {} }) {
-  const [phase, setPhase] = useState("idle"); // 'idle' | 'cutting' | 'split'
+  const { lang } = useLanguage();
+  const s = STR[lang] || STR.it;
+  
+
+  const [phase, setPhase] = useState("idle");
   const [t, setT] = useState(0);
   const canvasRef = useRef(null);
   const cx = Math.round(w * 0.5);
@@ -122,6 +181,23 @@ export default function LabExp({ w, h, onTool = () => {} }) {
     whiteSpace: "nowrap",
   };
 
+    const energyPanelBaseStyle = {
+    position: "absolute",
+    padding: "10px 16px",
+    borderRadius: 12,
+    background: "rgba(217, 103, 46, 0.96)",
+    color: "#f5f7ff",
+    boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
+    border: "1px solid rgba(255,255,255,0.16)",
+    fontWeight: 600,
+    fontSize: 14,
+    maxWidth: 260,
+    textAlign: "center",
+    pointerEvents: "none",
+    zIndex: 5,
+  };
+
+
   // ✂️ icona grande vicino al buco nero (scala con BIG)
   const SC_SIZE = Math.max(56, BIG * 0.6);
   const scissorsBadgeStyle = {
@@ -158,12 +234,13 @@ export default function LabExp({ w, h, onTool = () => {} }) {
         <div style={{ ...bhStyle(BIG), left: cx - BIG / 2, top: cy - BIG / 2 }}>
           {/* ✂️ icona grande vicino al bordo del buco nero DURANTE il taglio */}
           {phase === "cutting" && (
-            <div style={scissorsBadgeStyle} aria-hidden title="Taglio in corso">
+<div style={scissorsBadgeStyle} aria-hidden title={s.cuttingTooltip}>
               <span style={scissorsIconStyle}>✂️</span>
             </div>
           )}
 
-          <div style={massTagStyle}>Mₜₒₜₐₗₑ = 62 Masse Solari</div>
+          <div style={massTagStyle}>{s.totalMass}</div>
+
 
           {/* linea di taglio che appare con l’avanzamento */}
           <div
@@ -179,20 +256,41 @@ export default function LabExp({ w, h, onTool = () => {} }) {
             }}
           />
         </div>
-      ) : (
+           ) : (
         <>
           <div
-            style={{ ...bhStyle(small), left: cx - sep - small / 2, top: cy - small / 2 }}
+            style={{
+              ...bhStyle(small),
+              left: cx - sep - small / 2,
+              top: cy - small / 2,
+            }}
           >
-            <div style={massTagStyle}>M₁ = 36 Masse Solari</div>
+            <div style={massTagStyle}>{s.m1}</div>
           </div>
           <div
-            style={{ ...bhStyle(small), left: cx + sep - small / 2, top: cy - small / 2 }}
+            style={{
+              ...bhStyle(small),
+              left: cx + sep - small / 2,
+              top: cy - small / 2,
+            }}
           >
-            <div style={massTagStyle}>M₂ = 29 Masse Solari</div>
+            <div style={massTagStyle}>{s.m2}</div>
+          </div>
+
+          {/* Finestra informativa al centro tra i due buchi neri */}
+          <div
+            style={{
+              ...energyPanelBaseStyle,
+              left: cx,
+              top: cy,
+              transform: "translate(-50%, -140%)",
+            }}
+          >
+            {s.energyPanel}
           </div>
         </>
       )}
+
 
       {/* bottone azione */}
       <div
@@ -218,7 +316,7 @@ export default function LabExp({ w, h, onTool = () => {} }) {
             boxShadow: "0 10px 24px rgba(0,0,0,0.25)",
           }}
         >
-          {phase === "idle" ? "✂️ Scopri le masse iniziali dei 2 buchi neri" : "↩︎"}
+           {phase === "idle" ? s.idleButton : s.resetButton}
         </button>
       </div>
     </>

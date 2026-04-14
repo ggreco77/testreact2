@@ -21,8 +21,21 @@ const STR = {
     start: "▶️ Undas gravitatzionalis de una loba de istampus nieddus",
     stop: "⏸️ Para",
     typewriter:
-      "S’ispàtziu-tempus s’allonghiat e s’incurtzat e is ainai sensìbilis meda a beru, cumenti is interferòmetrus Virgo, LIGO e KAGRA, ammesurant sa passada de is undas gravitatzionalis.",
+      "S’ispàtziu-tempus s’allonghiat e s’incurtzat e is ainas sensìbilis meda a beru, cumenti is interferòmetrus Virgo, LIGO e KAGRA, ammesurant sa passada de is undas gravitatzionalis.",
   },
+  de: {
+  start: "▶️ Gravitationswellen von einem Paar Schwarzer Löcher",
+  stop: "⏸️ Stopp",
+  typewriter:
+    "Die Raumzeit dehnt und zieht sich zusammen, und hochempfindliche Instrumente wie die Interferometer Virgo, LIGO und KAGRA zeichnen das Vorbeiziehen einer Gravitationswelle auf.",
+},
+es: {
+  start: "▶️ Ondas gravitacionales de un sistema binario de agujeros negros",
+  stop: "⏸️ Parar",
+  typewriter:
+    "El espacio-tiempo se estira y se contrae, y instrumentos extremadamente sensibles como los interferómetros Virgo, LIGO y KAGRA registran el paso de una onda gravitacional.",
+},
+
 };
 
 /**

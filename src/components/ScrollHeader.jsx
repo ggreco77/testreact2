@@ -20,6 +20,17 @@ const HDR = {
     subtitle:
       "Bai paris cun Tensor su Dotori po provai cuatru isperièntzias istraordinàrias po iscoberri is àrcanas de su ispàtziu-tempus, de is istampus nieddus e de is undas gravitatzionalis",
   },
+  de: {
+  title: "Doktor Tensor – Der Spielplatz der Raumzeit",
+  subtitle:
+    "Begleite Doktor Tensor auf vier Abenteuern und erforsche die Geheimnisse der Raumzeit, der Schwarzen Löcher und der Gravitationswellen!",
+},
+es: {
+  title: "Doctor Tensor — Zona de juegos del espacio-tiempo",
+  subtitle:
+    "¡Únete a Doctor Tensor en cuatro aventuras para explorar los misterios del espacio-tiempo, los agujeros negros y las ondas gravitacionales!",
+},
+
 };
 
 export default function ScrollHeader() {

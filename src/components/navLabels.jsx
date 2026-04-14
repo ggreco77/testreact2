@@ -19,5 +19,19 @@ export const NAV = {
     bl: "Loba de istampus nieddus",
     br: "Einstein Telescope",
     contrast: "Muda su colori"
-  }
+  },
+  de: {
+  tl: "Das Gefüge der Raumzeit",
+  tr: "Gravitationswellen",
+  bl: "Schwarze-Loch-Paare",
+  br: "Einstein-Teleskop",
+  contrast: "Hoher Kontrast"
+},
+es: {
+  tl: "Tejido del espacio-tiempo",
+  tr: "Ondas gravitacionales",
+  bl: "Agujeros negros en pareja",
+  br: "Einstein Telescope",
+  contrast: "Alto contraste"
+},
 }

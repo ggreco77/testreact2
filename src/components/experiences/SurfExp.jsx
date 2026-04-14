@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useLanguage } from "../LanguageContext";
 
@@ -22,6 +22,19 @@ const STR = {
     line1: "Unu laboratòriu asuta de terra ⛏️🚜 cun ainas criogènicas ❄️🧊",
     line2: "Su logu prus ispantosu po ndi ddu pesai? Sa Sardigna, un’isula assèbia chieta a beru! 🤫🔇",
   },
+  de: {
+  on: "↩︎",
+  off: "✨ Was macht das Einstein-Teleskop so besonders?",
+  line1: "Ein Untergrund-Labor ⛏️🚜 mit Instrumenten, die auf extrem niedrige Temperaturen gekühlt werden. ❄️🧊",
+  line2: "Wo ist der perfekte Ort, um es zu bauen? Sardinien, eine wirklich ruhige Insel! 🤫🔇",
+},
+es: {
+  on: "↩︎",
+  off: "✨ ¿Por qué es especial el ET?",
+  line1: "Un laboratorio subterráneo ⛏️🚜 con instrumentación criogénica ❄️🧊",
+  line2: "¿El lugar perfecto para construirlo? Cerdeña, ¡una isla realmente tranquila! 🤫🔇",
+},
+
 };
 
 
@@ -56,6 +69,67 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
     };
     setIsLifting(true);
   };
+
+  const labelTextRef = useRef(null);
+const [labelBox, setLabelBox] = useState(null);
+const [labelFont, setLabelFont] = useState(
+  Math.round(Math.max(12, Math.min(22, w * 0.024)))
+);
+
+// FITTING WORD INTO BOX
+useLayoutEffect(() => {
+  if (!etOn) {
+    setLabelBox(null);
+    return;
+  }
+
+  let cancelled = false;
+  const maxW = Math.round(w * 0.92);
+  let fs = Math.round(Math.max(12, Math.min(22, w * 0.024)));
+
+  const measure = () => {
+    const el = labelTextRef.current;
+    if (!el) return;
+
+    const b = el.getBBox();
+
+    // se troppo largo, riduci font e rimisura al frame successivo
+    if (b.width > maxW && fs > 11) {
+      fs = Math.max(11, Math.floor(fs * 0.92));
+      setLabelFont(fs);
+      requestAnimationFrame(() => {
+        if (!cancelled) measure();
+      });
+      return;
+    }
+
+    // padding coerente col font effettivo
+    const padX = Math.round(Math.max(12, fs * 0.7));
+    const padY = Math.round(Math.max(10, fs * 0.55));
+
+    setLabelBox({
+      x: Math.round(b.x - padX),
+      y: Math.round(b.y - padY),
+      w: Math.round(b.width + padX * 2),
+      h: Math.round(b.height + padY * 2),
+    });
+  };
+
+  // 1) applica font iniziale
+  setLabelFont(fs);
+
+  // 2) misura dopo che React ha renderizzato il testo con quel font
+  const raf = requestAnimationFrame(() => {
+    if (!cancelled) measure();
+  });
+
+  return () => {
+    cancelled = true;
+    cancelAnimationFrame(raf);
+  };
+}, [etOn, lang, w, h, s.line1, s.line2]);
+
+
 
   useEffect(() => {
     let raf = 0;
@@ -99,10 +173,17 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
 
   // --- Terreno: da nascosto (off-screen) a livello target ---
   // ↑ Alzato di PIÙ: target più alto (più vicino al bordo superiore).
-  const GROUND_TARGET_Y = Math.round(cy + triR * 0.10); // prima era ~0.25
+  //const GROUND_TARGET_Y = Math.round(cy + triR * 0.05); // prima era ~0.25
+//const GROUND_TARGET_Y = 0.1; // terreno arriva fino al bordo alto del canvas
+
+const GROUND_TARGET_Y = Math.round(h * 0.23); // 10% dall’alto
+
   const GROUND_HIDDEN_Y = h + 60;                        // completamente fuori scena
   const groundY = Math.round(GROUND_HIDDEN_Y + (GROUND_TARGET_Y - GROUND_HIDDEN_Y) * lift);
   const tunnelY = groundY - Math.round(triR * 0.12);
+
+  const labelY = Math.min(h - 50, groundY + (h < 520 ? 90 : 130));
+
 
   // --- Animazioni lente (icone) ---
   const bob = Math.sin(t * 0.6) * 4;
@@ -343,23 +424,45 @@ export default function SurfExp({ w = 900, h = 520, onWave = () => {} }) {
           </>
         )}
 
-        {/* Etichetta (localizzata) */}
-        <text
-  x={cx}
-  y={Math.min(h - 50, groundY + (h < 520 ? 90 : 130))}
-  textAnchor="middle"
-  fill="#eaf3ff"
-  opacity="0.98"
-  fontSize={Math.round(Math.max(12, Math.min(28, w * 0.03)))} // responsive
->
-  {etOn && (
-    <>
-     
-     <tspan x={cx}>{s.line1}</tspan>
-      <tspan x={cx} dy="1.2em">{s.line2}</tspan>
-    </>
-  )}
-</text>
+{/* Box testo (localizzata) */}
+{/* Etichetta dentro box auto-size */}
+{etOn && (
+  <g transform={`translate(0, ${labelY})`}>
+    {labelBox && (
+      <rect
+        x={labelBox.x}
+        y={labelBox.y}
+        width={labelBox.w}
+        height={labelBox.h}
+        rx="14"
+        ry="14"
+        fill="rgba(240,240,240,0.75)"
+        stroke="rgba(255,255,255,0.55)"
+        strokeWidth="1"
+      />
+    )}
+
+    <text
+      ref={labelTextRef}
+      x={cx}
+      y={0}  // 👈 il testo ora parte da 0, e lo sposta il gruppo
+      textAnchor="middle"
+      dominantBaseline="hanging"
+      fill="#0b1220"
+      opacity="0.98"
+      fontSize={labelFont}
+      fontWeight="800"
+    >
+      <tspan x={cx}>{s.line1}</tspan>
+      <tspan x={cx} dy={Math.round(labelFont * 1.25)}>{s.line2}</tspan>
+    </text>
+  </g>
+)}
+
+
+
+
+
 
       </svg>
     </>

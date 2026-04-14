@@ -79,3 +79,39 @@
     flex-wrap: wrap;
   }
 }
+
+.ft-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 10px;
+  border-radius: 10px;
+
+  color: var(--ft-text);
+  text-decoration: none;
+
+  border: 1px solid var(--ft-border);
+  background: rgba(255, 255, 255, 0.06);
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.ft-icon-link:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.ft-icon-link:active {
+  transform: translateY(0px);
+}
+
+.ft-icon-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}
+
+.ft-icon-link-text {
+  font-weight: 700;
+  font-size: 13px;
+}

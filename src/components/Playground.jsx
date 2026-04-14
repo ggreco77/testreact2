@@ -43,7 +43,7 @@ export default function Playground({ mode, highContrast }) {
       badge: "Start",
       hello: "Hi! I'm Doctor Tensor.",
       choose: "Choose an adventure",
-      tail: "and join me in the Playground!",
+      tail: "and join me on the Playground!",
     },
     sc: {
       badge: "Start",
@@ -51,6 +51,19 @@ export default function Playground({ mode, highContrast }) {
       choose: "Scioberai-ddoi un’aventura",
       tail: "e benei cun mei in s’area de is giogus.",
     },
+    de: {
+  badge: "Start",
+  hello: "Hallo! Ich bin Doktor Tensor.",
+  choose: "Wähle ein Abenteuer",
+  tail: "und komm mit mir auf den Raumzeit-Spielplatz!",
+},
+es: {
+  badge: "Inicio",
+  hello: "¡Hola! Soy Doctor Tensor.",
+  choose: "Elige una aventura",
+  tail: "y acompáñame en la zona de juegos.",
+},
+
   };
   const s = STR[lang] || STR.it;
 

@@ -45,32 +45,52 @@ export const TIPS_EN = {
 // -------- Sardo (bozza) --------
 export const TIPS_SC = {
   tl: [
-    "Un’atividadi de fai in classi po imparai, cun animatzionis graficas simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
+    "Un’atividadi de fai in classi po imparai, cun animatzionis graficàs simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
     "Trìsia Tensor su Dotori cun su mouse aintru de su tessìngiu de s’ispàtziu-tempus. Una pintadura t’at a ammostai su chi est cuntènniu is sa setzioni e su chi depis fai."
   ],
   tr: [
-      "Un’atividadi de fai in classi po imparai, cun animatzionis graficas simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
+      "Un’atividadi de fai in classi po imparai, cun animatzionis graficàs simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
     "Trìsia Tensor su Dotori cun su mouse aintru de su tessìngiu de s’ispàtziu-tempus. Una pintadura t’at a ammostai su chi est cuntènniu is sa setzioni e su chi depis fai."
   ],
   bl: [
-      "Un’atividadi de fai in classi po imparai, cun animatzionis graficas simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
+      "Un’atividadi de fai in classi po imparai, cun animatzionis graficàs simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
     "Trìsia Tensor su Dotori cun su mouse aintru de su tessìngiu de s’ispàtziu-tempus. Una pintadura t’at a ammostai su chi est cuntènniu is sa setzioni e su chi depis fai."
   ],
   br: [
-       "Un’atividadi de fai in classi po imparai, cun animatzionis graficas simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
+       "Un’atividadi de fai in classi po imparai, cun animatzionis graficàs simplis, sa relatividadi generali, is undas gravitatzionalis e is ainas de urtima generatzioni.",
     "Trìsia Tensor su Dotori cun su mouse aintru de su tessìngiu de s’ispàtziu-tempus. Una pintadura t’at a ammostai su chi est cuntènniu is sa setzioni e su chi depis fai."
   ]
 };
 
-// Dizionario per lingua
-export const TIPS_BY_LANG = { it: TIPS_IT, en: TIPS_EN, sc: TIPS_SC };
+export const TIPS_DE = {
+  tl: [
+    "Eine Aktivität für den Unterricht: Mit einfachen grafischen Animationen die Allgemeine Relativitätstheorie, Gravitationswellen und modernste Instrumente entdecken.",
+    "Ziehe Doktor Tensor mit der Maus über das Raumzeit-Gitter. Eine Sprechblase erklärt den Abschnitt und was zu tun ist.",
+  ],
+  tr: [
+    "Eine Aktivität für den Unterricht: Mit einfachen grafischen Animationen die Allgemeine Relativitätstheorie, Gravitationswellen und modernste Instrumente entdecken.",
+    "Ziehe Doktor Tensor mit der Maus über das Raumzeit-Gitter. Eine Sprechblase erklärt den Abschnitt und was zu tun ist.",
+  ],
+  bl: [
+    "Eine Aktivität für den Unterricht: Mit einfachen grafischen Animationen die Allgemeine Relativitätstheorie, Gravitationswellen und modernste Instrumente entdecken.",
+    "Ziehe Doktor Tensor mit der Maus über das Raumzeit-Gitter. Eine Sprechblase erklärt den Abschnitt und was zu tun ist.",
+  ],
+  br: [
+    "Eine Aktivität für den Unterricht: Mit einfachen grafischen Animationen die Allgemeine Relativitätstheorie, Gravitationswellen und modernste Instrumente entdecken.",
+    "Ziehe Doktor Tensor mit der Maus über das Raumzeit-Gitter. Eine Sprechblase erklärt den Abschnitt und was zu tun ist.",
+  ],
+};
 
-// Titolo del pannello suggerimenti per lingua
+export const TIPS_BY_LANG = { it: TIPS_IT, en: TIPS_EN, de: TIPS_DE, sc: TIPS_SC };
+
 export const TIPS_TITLE = {
   it: "Suggerimenti e Modalità d'uso",
   en: "Tips & How it works",
+  de: "Tipps & So funktioniert's",
   sc: "Consillus e Modalidadis de impreu"
 };
+
+
 
 /** Hook: restituisce i tips nella lingua corrente */
 export function useTips() {
